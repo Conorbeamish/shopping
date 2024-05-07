@@ -1,34 +1,52 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
 import './App.css'
+import axios from 'axios';
+import {jwtDecode} from "jwt-decode";
+import { useEffect, useState } from "react";
+import {UserProvider} from "./contexts/User";
+import { BrowserRouter as Router} from "react-router-dom";
+import { setTokenHeader } from "./utils/apiCall";
+import {  Routes, Route,} from "react-router-dom";
+import RequireAuth from "./components/RequireAuth.jsx";
+import Login from "./pages/Login.jsx"
+import ShoppingList from "./pages/ShoppingList.jsx"
+import Main from "./pages/Main.jsx"
+import { baseURL } from './utils/baseUrl.js';
+import Header from './components/Header.jsx';
 
 function App() {
-  const [count, setCount] = useState(0)
 
+  const [userData, setUserData] = useState();
+  //Rehydrate user on page load 
+  useEffect(() => {
+    if(localStorage.jwtToken){
+      setTokenHeader(localStorage.jwtToken);
+      const fetchData = () => {
+        const userInfo = jwtDecode(localStorage.jwtToken)
+        setUserData(userInfo)
+      }
+      fetchData();
+    }
+  }, [ ])
+  
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    //Context for current user
+    <UserProvider value={{userData, setUserData}}>
+      <Router>
+        <Header/>
+        <Routes>
+          <Route path="/" element={<Main />} />
+          <Route path="/signin" element={<Login loginType={"signin"} />} />
+          <Route path="/signup" element={<Login loginType={"signup"} />} />
+          
+          <Route path="/user/:id/shopping" element={
+            <RequireAuth userData={userData}>
+              <ShoppingList/>
+            </RequireAuth>
+          } />
+
+        </Routes>
+      </Router>
+    </UserProvider>
   )
 }
 

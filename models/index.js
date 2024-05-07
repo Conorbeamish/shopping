@@ -9,3 +9,4 @@ mongoose.connect(process.env.MONGO_DB_URI || "mongodb://localhost/shopping", {
 .catch(err => console.log(err));
 
 module.exports.User = require("./user");
+module.exports.Item = require("./item");
