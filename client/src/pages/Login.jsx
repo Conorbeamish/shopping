@@ -10,7 +10,7 @@ import { baseURL } from '../utils/baseUrl';
 const Login = ({loginType}) => {
     const navigate = useNavigate();
     const {userData, setUserData} = useContext(UserContext);
-    
+
     const [userFormData, setUserFormData] = useState({
         username: "",
         password: ""
@@ -36,7 +36,8 @@ const Login = ({loginType}) => {
 
     return(
         <div>
-            <form onSubmit= {handleSubmit}>
+            <form onSubmit= {handleSubmit} className='authForm'>
+                <h3 style={{textAlign:"center", marginTop:"0"}}>{loginType == "signup" ? "Sign up" : "Sign In"}</h3>
                 <label>Username </label>
                 <input 
                 type="text" 

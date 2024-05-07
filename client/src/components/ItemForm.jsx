@@ -35,31 +35,38 @@ const ItemForm = ({ addItem }) => {
     }
 
     return (
-        <form onSubmit={handleSubmit}>
-            <div>
-                <label>Name:</label>
-                <input 
-                    type="text" 
-                    name="name" 
-                    value={formData.name} 
-                    onChange={handleInputChange} 
-                    required 
-                />
-                {formErrors.name && <span style={{ color: 'red' }}>{formErrors.name}</span>}
-            </div>
-            <div>
-                <label>Price:</label>
-                <input 
-                    type="number" 
-                    name="price" 
-                    value={formData.price} 
-                    onChange={handleInputChange} 
-                    required 
-                />
-                {formErrors.price && <span style={{ color: 'red' }}>{formErrors.price}</span>}
-            </div>
-            <button type="submit">Add Item</button>
-        </form>
+        <>
+            <h3>Add an Item</h3>
+            <form onSubmit={handleSubmit} className='itemForm'>
+                <div>
+                    <label>Name:</label>
+                    <input 
+                        type="text" 
+                        name="name" 
+                        value={formData.name} 
+                        onChange={handleInputChange} 
+                        required 
+                    />
+                    {formErrors.name && <span style={{ color: 'red' }}>{formErrors.name}</span>}
+                </div>
+                <div>
+                    <label>Price:</label>
+                    <input 
+                        type="number" 
+                        name="price" 
+                        value={formData.price} 
+                        onChange={handleInputChange} 
+                        required 
+                        style={{
+                            width: "5rem"
+                        }}
+                    />
+                    {formErrors.price && <span style={{ color: 'red' }}>{formErrors.price}</span>}
+                </div>
+                <button type="submit">Add Item</button>
+            </form>
+        </>
+
     );
 }
 
