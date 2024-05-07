@@ -5,6 +5,10 @@ const router = express.Router();
 
 const signUp = async function(req, res, next){
   try {
+    // Check if password is at least 10 characters long
+    if (req.body.password.length < 10) {
+      throw new Error("Password must be at least 10 characters long");
+    }
     let user = await db.User.create(req.body);
     let {id, username} = user
     let token = jwt.sign({

@@ -84,7 +84,7 @@ const ShoppingList = () => {
     }
 
     return (
-        <>
+        <div class="shoppingContent">
             <h3>Your shopping list with a budget of £{userData.spendingLimit}</h3>
             <ItemList 
                 deleteItem={deleteItem} 
@@ -104,7 +104,7 @@ const ShoppingList = () => {
             <ItemForm
                 addItem={addItem}
             />
-        </>
+        </div>
     );
 }
 

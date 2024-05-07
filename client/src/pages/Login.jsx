@@ -19,6 +19,10 @@ const Login = ({loginType}) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (userFormData.password.length < 10) {
+          alert("Password must be at least 10 characters long.");
+          return; // Stop the submission if validation fails
+        }
         axios({
           method: "post",
           url: `${baseURL()}api/auth/${loginType}`,
@@ -31,7 +35,10 @@ const Login = ({loginType}) => {
           setUserData(userInfo)
           navigate("/")
         })
-        .catch(err => console.log(err))
+        .catch(err => {
+          alert(`An error occurred: ${err.response.status} - ${err.response.data.message}`);
+          console.error(err);
+        });
       }
 
     return(

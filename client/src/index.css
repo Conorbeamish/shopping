@@ -9,19 +9,8 @@ body{
   min-height: 100vh;
   margin: 0;
   text-align: center;
-  background-color: 
+  background-color: #d4e3ef;
   color: #282b2d;
-}
-
-nav {
-  display: flex;
-  justify-content: space-between;
-  width: calc(100% - 2rem); /* Subtract the total padding from the width */
-  margin-bottom: 1rem;
-  align-items: center;
-  background-color: #d4e4f1;
-  padding: 0.5rem 1rem; 
-  margin-bottom: 5rem;
 }
 
 

@@ -17,7 +17,7 @@ Both can be run concurrently from root directory, see below
 ```terminal
 LICENSE
 package.json
-   .env (to create .env, check [prepare your secret session])
+   .env 
 client/
    package.json
 ...
