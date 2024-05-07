@@ -16,6 +16,10 @@ const userSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "item"
   }],
+  spendingLimit: {
+    type: Number,
+    default: 10.00
+  }
 });
 
 //Hash and Salt

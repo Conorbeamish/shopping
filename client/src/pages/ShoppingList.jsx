@@ -9,17 +9,31 @@ const ShoppingList = () => {
     const [totalPrice, setTotalPrice] = useState(0);
 
     useEffect(() => {
-        axios({
-            method: "get",
-            url: `${baseURL()}api/users/${userData.id}/items`,
-        })
-        .then(res => {
-            const items = res.data;
-            setUserData({ ...userData, items });
-            calculateTotalPrice(items); // Calculate total price when items are fetched
-        })
-        .catch(err => console.log(err));
-    }, [userData.id, setUserData]);
+        const fetchData = () => {
+            axios.get(`${baseURL()}api/users/${userData.id}/items`)
+                .then(resItems => {
+                    const items = resItems.data;
+                    setUserData({ ...userData, items });
+                    calculateTotalPrice(items); 
+                    
+                    // Fetch spending limit 
+                    if (!userData.spendingLimit) {
+                        axios.get(`${baseURL()}api/users/${userData.id}/items/spendingLimit`)
+                            .then(res => {
+                                const spendingLimit = res.data.spendingLimit;
+                                if(spendingLimit){setUserData({ ...userData, spendingLimit })}
+                            })
+                            .catch(err => console.log(err));
+                    }
+                })
+                .catch(err => console.log(err));
+        };
+    
+        fetchData();
+    
+    }, [userData.id, userData.spendingLimit, setUserData]);
+
+    
 
     const calculateTotalPrice = (items) => {
         const total = items.reduce((acc, item) => acc + item.price, 0);
@@ -28,9 +42,13 @@ const ShoppingList = () => {
 
     return (
         <>
-            <h3>Your shopping list</h3>
+            <h3>Your shopping list with a budget of £{userData.spendingLimit}</h3>
             <ItemList items={userData.items} />
-            <p>Total: £{totalPrice.toFixed(2)}</p> {/* Display total price */}
+            <p>Total: £{totalPrice.toFixed(2)}</p> 
+            {totalPrice > userData.spendingLimit ? 
+                <p style={{ color: 'red' }}>You have exceeded your budget by  £{Math.abs(userData.spendingLimit - totalPrice).toFixed(2)}</p> 
+                : 
+            ""}
         </>
     );
 }
