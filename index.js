@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const path = require("path");
 const cors = require("cors");
 const authRoutes = require("./routes/auth");
+const itemRoutes = require("./routes/items");
 const {loginRequired, correctUser}  = require("./middleware/auth");
 
 const port = process.env.PORT || 5000
@@ -15,7 +16,11 @@ require("dotenv").config();
 
 //Routes
 app.use("/api/auth", authRoutes);
-
+app.use("/api/users/:id/items", 
+  loginRequired,
+  correctUser,
+  itemRoutes
+);
 
 //Serve React in Production
 if (process.env.NODE_ENV === 'production') {

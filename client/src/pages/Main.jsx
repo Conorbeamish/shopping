@@ -11,7 +11,7 @@ const Main = () => {
         <h2>Welcome to your shopping list</h2>
         {userData?.username ? 
                 <div>
-                    <Link to={"/shopping"}>
+                    <Link to={`/user/${userData.id}/shopping`}>
                       Get Started
                     </Link>
                 </div>
