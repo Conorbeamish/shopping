@@ -33,20 +33,50 @@ const ShoppingList = () => {
     
     }, [userData.id, userData.spendingLimit, setUserData]);
 
-    
+
 
     const calculateTotalPrice = (items) => {
         const total = items.reduce((acc, item) => acc + item.price, 0);
         setTotalPrice(total);
     }
 
+    const deleteItem = (itemId) => {
+        axios.delete(`${baseURL()}api/users/${userData.id}/items/${itemId}`)
+            .then(res => {
+                const updatedItems = userData.items.filter(item => item._id !== itemId);
+                setUserData({ ...userData, items: updatedItems });
+            })
+            .catch(err => console.log(err));
+    }
+
+    const markComplete = (itemId) => {
+        axios.put(`${baseURL()}api/users/${userData.id}/items/${itemId}`)
+            .then(res => {
+                const updatedItem = res.data;
+                const updatedItems = userData.items.map(item =>
+                    item._id === itemId ? updatedItem : item
+                );
+                setUserData({ ...userData, items: updatedItems });
+            })
+            .catch(err => console.log(err));
+    }
+
     return (
         <>
             <h3>Your shopping list with a budget of £{userData.spendingLimit}</h3>
-            <ItemList items={userData.items} />
+            <ItemList 
+                deleteItem={deleteItem} 
+                markComplete={markComplete} 
+                items={userData.items} 
+            />
             <p>Total: £{totalPrice.toFixed(2)}</p> 
             {totalPrice > userData.spendingLimit ? 
-                <p style={{ color: 'red' }}>You have exceeded your budget by  £{Math.abs(userData.spendingLimit - totalPrice).toFixed(2)}</p> 
+                <p style={{ 
+                    color: 'red', 
+                    fontSize: '1.5rem'
+                }}>
+                    You have exceeded your budget by  <strong>£{Math.abs(userData.spendingLimit - totalPrice).toFixed(2)}</strong>
+                </p> 
                 : 
             ""}
         </>
