@@ -3,10 +3,23 @@ import UserContext from '../contexts/User'
 import { baseURL } from '../utils/baseUrl';
 import ItemList from "../components/ItemList"
 import axios from 'axios';
+import ItemForm from '../components/ItemForm';
 
 const ShoppingList = () => {
     const { userData, setUserData } = useContext(UserContext);
     const [totalPrice, setTotalPrice] = useState(0);
+
+    //Will trigger and update total price when items are added or removed
+    useEffect(() => {
+        const calculateTotalPrice = (items) => {
+            // Handle case when items is undefined or null
+            if (!items) return 0; 
+            const total = items.reduce((acc, item) => acc + item.price, 0);
+            setTotalPrice(total);
+        }
+
+        calculateTotalPrice(userData.items);
+    }, [userData.items]);
 
     useEffect(() => {
         const fetchData = () => {
@@ -61,6 +74,15 @@ const ShoppingList = () => {
             .catch(err => console.log(err));
     }
 
+    const addItem = (item) => {
+        axios.post(`${baseURL()}api/users/${userData.id}/items`, item)
+        .then(res => {
+            const newItem = res.data;
+            setUserData({ ...userData, items: [...userData.items, newItem] });
+        })
+        .catch(err => console.log(err));
+    }
+
     return (
         <>
             <h3>Your shopping list with a budget of £{userData.spendingLimit}</h3>
@@ -79,6 +101,9 @@ const ShoppingList = () => {
                 </p> 
                 : 
             ""}
+            <ItemForm
+                addItem={addItem}
+            />
         </>
     );
 }

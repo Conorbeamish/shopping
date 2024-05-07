@@ -58,9 +58,36 @@ const toggleComplete = async function(req, res, next) {
     }
 }
 
+const createItem = async function(req, res, next){
+    try{
+        // Create a new item using the provided data
+        let newItem = await db.Item.create({
+            user: req.params.id,
+            name: req.body.name,
+            price: req.body.price
+        });
+
+        // Find the user associated with the item and update their items array
+        let foundUser = await db.User.findById(req.params.id);
+        foundUser.items.push(newItem.id);
+        await foundUser.save();
+
+        // Populate the newItem with the user's username
+        let populatedItem = await db.Item.findById(newItem._id).populate("user", {
+            username: true
+        });
+
+        // Return the newly created item with the user's username
+        return res.status(200).json(populatedItem);
+    } catch(err) {
+        return next(err);
+    }
+}
+
 router
   .route("/")
-  .get(getItems);
+  .get(getItems)
+  .post(createItem);
 
 router
   .route("/spendingLimit") // Endpoint to get spending total

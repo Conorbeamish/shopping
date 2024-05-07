@@ -7,7 +7,7 @@ const ItemList = ({ items, deleteItem, markComplete }) => {
                 <ul>
                     {items.map(item => (
                         <li key={item._id} style={{ textDecoration: item.isComplete ? 'line-through' : 'none' }}>
-                            <strong>{item.name}</strong>: £{item.price}
+                            <strong>{item.name}</strong>: £{item.price.toFixed(2)}
                             <button 
                                 onClick={() => deleteItem(item._id)} 
                                 style={{ backgroundColor: 'red', color: 'white', marginLeft: '10px' }}
