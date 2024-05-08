@@ -53,3 +53,11 @@ You need to add a SECRET_KEY in .env at root level to connect to MongoDB
 npm i       // npm install packages
 npm run dev // run it locally and start both the server and the client     
 ```
+
+### Testing
+
+Testing is done with jest 
+
+```terminal
+npm test
+```

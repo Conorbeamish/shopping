@@ -84,7 +84,7 @@ const ShoppingList = () => {
     }
 
     return (
-        <div class="shoppingContent">
+        <div className="shoppingContent">
             <h3>Your shopping list with a budget of £{userData.spendingLimit}</h3>
             <ItemList 
                 deleteItem={deleteItem} 

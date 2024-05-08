@@ -5,6 +5,7 @@ const cors = require("cors");
 const authRoutes = require("./routes/auth");
 const itemRoutes = require("./routes/items");
 const {loginRequired, correctUser}  = require("./middleware/auth");
+const { connectDB } = require("./models/index");
 
 const port = process.env.PORT || 5000
 const app = express();
@@ -13,14 +14,24 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 require("dotenv").config();
+connectDB();
 
 //Routes
-app.use("/api/auth", authRoutes);
+app.use("/api/auth", authRoutes.router);
 app.use("/api/users/:id/items", 
   loginRequired,
   correctUser,
-  itemRoutes
+  itemRoutes.router
 );
+
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Error:", err);
+  res.status(err.status || 500).json({
+    error: err.message || "Internal Server Error"
+  });
+});
+
 
 //Serve React in Production
 if (process.env.NODE_ENV === 'production') {

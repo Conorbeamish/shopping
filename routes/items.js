@@ -99,4 +99,11 @@ router
 .put(toggleComplete); // Endpoint to toggle item completion status
 
 
-module.exports = router;
+module.exports = {
+    router: router,
+    getItems,
+    getSpendingLimit,
+    deleteItem,
+    toggleComplete,
+    createItem
+  };

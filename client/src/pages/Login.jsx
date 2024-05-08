@@ -36,8 +36,7 @@ const Login = ({loginType}) => {
           navigate("/")
         })
         .catch(err => {
-          alert(`An error occurred: ${err.response.status} - ${err.response.data.message}`);
-          console.error(err);
+          alert(`An error occurred: ${err.response.status} - ${err.response.data.error}`);
         });
       }
 
